@@ -1,9 +1,9 @@
 from __future__ import (absolute_import, division, print_function)
+
 __metaclass__ = type
 
-
 from ansible.errors import AnsibleError
-from ansible.module_utils.six.moves.urllib.error import HTTPError, URLError
+# noinspection PyProtectedMember
 from ansible.module_utils._text import to_text
 from ansible.module_utils.urls import open_url, ConnectionError, SSLValidationError
 from ansible.plugins.lookup import LookupBase
@@ -14,10 +14,11 @@ try:
     from __main__ import display
 except ImportError:
     from ansible.utils.display import Display
+
     display = Display()
 
-class LookupModule(LookupBase):
 
+class LookupModule(LookupBase):
     def run(self, terms, variables=None, **kwargs):
         api_key = kwargs.get('api_key', True)
         github_org = kwargs.get('github_org', True)
@@ -27,7 +28,7 @@ class LookupModule(LookupBase):
         for member in g.get_organization(github_org).get_members():
             ret.append(member.login)
 
-        #for term in terms:
+        # for term in terms:
         #    display.vvvv("url lookup connecting to %s" % term)
         #    try:
         #        response = open_url(term, validate_certs=validate_certs, use_proxy=use_proxy)
@@ -47,4 +48,3 @@ class LookupModule(LookupBase):
         #        ret.append(to_text(response.read()))
         print(type(ret))
         return ret
-
